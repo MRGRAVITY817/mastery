@@ -9,8 +9,9 @@ defmodule Mastery.Core.Template do
                                       generate the values in template blanks.
   - checker(function): checks if the answer is correct.
   """
-  defstruct ~w[name category instructions raw compiled generators checker]a
+
   # ~w sigil creates list of strings.
   # with `a` prefix, it will instead create list of atoms.
+  defstruct ~w[name category instructions raw compiled generators checker]a
 end
 
