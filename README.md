@@ -1,21 +1,19 @@
 # Mastery
 
-**TODO: Add description**
+A quiz generator.  
+It generates quiz with predefined template.
 
-## Installation
+## Data structures for each nouns
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `mastery` to your list of dependencies in `mix.exs`:
+### Template
 
-```elixir
-def deps do
-  [
-    {:mastery, "~> 0.1.0"}
-  ]
-end
-```
+- name: atom
+- category: atom
+- instructions: string
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/mastery>.
+### Question
 
+- raw: string
+- compiled: macro
+- generators: `%{substitution: list or function}`
+- checker: `function(substitution, string) -> boolean`
