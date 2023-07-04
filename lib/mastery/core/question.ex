@@ -3,21 +3,37 @@ defmodule Mastery.Core.Question do
 
   defstruct ~w[asked substitutions template]a
 
+  def new(%Template{} = template) do
+    template.generators
+    |> Enum.map(&build_substitution/1)
+    |> evaluate(template)
+  end
+
   defp build_substitution({name, choices_or_generator}) do
     {name, choose(choices_or_generator)}
   end
 
-  @doc """
-  Choose random question data from given list
-  """
   defp choose(choices) when is_list(choices) do
     Enum.random(choices)
   end
 
-  @doc """
-  Generate question data
-  """
   defp choose(generator) when is_function(generator) do
     generator.()
+  end
+
+  defp compile(template, substitutions) do
+    # `eval_quoted()` returns {result, binding} 
+    # we only need first element.
+    template.compiled
+    |> Code.eval_quoted(assigns: substitutions)
+    |> elem(0)
+  end
+
+  defp evaluate(substitutions, template) do
+    %__MODULE__{
+      asked: compile(template, substitutions),
+      substitutions: substitutions,
+      template: template
+    }
   end
 end
