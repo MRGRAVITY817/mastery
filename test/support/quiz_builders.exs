@@ -8,6 +8,8 @@ defmodule QuizBuilders do
 
   alias Mastery.Core.{Template, Question, Quiz}
 
+  ## Templates
+
   def template_fields(overrides \\ []) do
     Keyword.merge(
       [
@@ -45,5 +47,24 @@ defmodule QuizBuilders do
     left = Keyword.fetch!(substitutions, :left)
     right = Keyword.fetch!(substitutions, :right)
     to_string(left + right) == String.trim(answer)
+  end
+
+  ## Quiz
+
+  def quiz_fields(overrides) do
+    Keyword.merge([title: "Simple Arithmetic"], overrides)
+  end
+
+  def build_quiz(quiz_overrides \\ []) do
+    quiz_overrides
+    |> quiz_fields()
+    |> Quiz.new()
+  end
+
+  def build_question(overrides \\ []) do
+    overrides
+    |> template_fields()
+    |> Template.new()
+    |> Question.new()
   end
 end
