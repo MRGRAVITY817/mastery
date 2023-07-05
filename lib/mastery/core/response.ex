@@ -10,7 +10,7 @@ defmodule Mastery.Core.Response do
   ]a
 
   def new(quiz, email, answer) do
-    question = quiz.current_answer
+    question = quiz.current_question
     template = question.template
 
     %__MODULE__{
