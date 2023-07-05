@@ -8,3 +8,9 @@
 • Shape functions for composition
 • Build functions at a single level of abstraction
 • Make decisions in function heads where possible
+
+## Run Test Coverage
+
+```bash
+$ MIX_ENV=test mix converalls
+```
