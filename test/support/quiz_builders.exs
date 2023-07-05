@@ -7,4 +7,43 @@ defmodule QuizBuilders do
   end
 
   alias Mastery.Core.{Template, Question, Quiz}
+
+  def template_fields(overrides \\ []) do
+    Keyword.merge(
+      [
+        name: :single_digit_addition,
+        category: :addition,
+        instruction: "Add the numbers",
+        raw: "<%= @left &>" + "<%= @right &>",
+        generators: addition_generators(single_digits()),
+        checker: &addition_checker/2
+      ],
+      overrides
+    )
+  end
+
+  def double_digit_addition_template_fields() do
+    template_fields(
+      name: :double_digit_addition,
+      generators: addition_generators(double_digits())
+    )
+  end
+
+  def addition_generators(left, right \\ nil) do
+    %{left: left, right: right || left}
+  end
+
+  def double_digits() do
+    Enum.to_list(10..99)
+  end
+
+  def single_digits() do
+    Enum.to_list(0..9)
+  end
+
+  def addition_checker(substitutions, answer) do
+    left = Keyword.fetch!(substitutions, :left)
+    right = Keyword.fetch!(substitutions, :right)
+    to_string(left + right) == String.trim(answer)
+  end
 end
