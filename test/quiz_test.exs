@@ -1,6 +1,28 @@
 defmodule QuizTest do
+  alias Mastery.Core.Quiz
   use ExUnit.Case
   use QuizBuilders
+
+  describe "when a quiz has two templates" do
+    setup [:quiz]
+
+    test "the next question is randomly selected", %{quiz: quiz} do
+      %{current_question: %{template: first_template}} = Quiz.select_question(quiz)
+
+      other_template = eventually_pick_other_template(quiz, first_template)
+
+      assert first_template != other_template
+    end
+
+    test "templates are unique until cycle repeats", %{quiz: quiz} do
+      first_quiz = Quiz.select_question(quiz)
+      second_quiz = Quiz.select_question(first_quiz)
+      reset_quiz = Quiz.select_question(second_quiz)
+
+      assert template(first_quiz) != template(second_quiz)
+      assert template(reset_quiz) in [template(first_quiz), template(second_quiz)]
+    end
+  end
 
   # Test Helper Methods
 
@@ -24,6 +46,16 @@ defmodule QuizTest do
     email = "mathy@example.com"
     response = Response.new(quiz, email, answer)
     Quiz.answer_question(quiz, response)
+  end
+
+  defp assert_more_questions(quiz) do
+    refute is_nil(quiz)
+    quiz
+  end
+
+  defp refute_more_questions(quiz) do
+    assert is_nil(quiz)
+    quiz
   end
 
   # Text Context Fixture
