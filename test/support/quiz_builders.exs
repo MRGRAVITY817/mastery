@@ -15,8 +15,8 @@ defmodule QuizBuilders do
       [
         name: :single_digit_addition,
         category: :addition,
-        instruction: "Add the numbers",
-        raw: "<%= @left &>" + "<%= @right &>",
+        instructions: "Add the numbers",
+        raw: "<%= @left %> + <%= @right %>",
         generators: addition_generators(single_digits()),
         checker: &addition_checker/2
       ],
