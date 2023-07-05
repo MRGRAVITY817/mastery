@@ -16,7 +16,7 @@ defmodule ResponseTest do
     end
   end
 
-  # Helper methods
+  # Test Helper Methods
 
   defp quiz() do
     fields = template_fields(generators: %{left: [1], right: [2]})
