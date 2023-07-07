@@ -31,4 +31,14 @@ defmodule Mastery.Boundary.QuizSession do
       {quiz, email}
     }
   end
+
+  # Service APIs
+
+  def select_question(session) do
+    GenServer.call(session, :select_question)
+  end
+
+  def answer_question(session, answer) do
+    GenServer.call(session, {:answer_question, answer})
+  end
 end
