@@ -11,9 +11,7 @@ defmodule Mastery.Core.Quiz do
   - record(map of tempate=>integer): the number of correct 
      answers in a row for each template.
   """
-  alias Mastery.Core.Response
-  alias Mastery.Core.Question
-  alias Mastery.Core.Template
+  alias Mastery.Core.{Response, Question, Template}
 
   defstruct title: nil,
             mastery: 3,
