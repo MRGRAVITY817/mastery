@@ -33,13 +33,16 @@ defmodule Mastery.Boundary.QuizSession do
   end
 
   # Service APIs
+  #
+  # GenServer should call session with unique name, not pid.
+  # Because pid changes when they die - name still remains the same.
 
-  def select_question(session) do
-    GenServer.call(session, :select_question)
+  def select_question(name) do
+    GenServer.call(via(name), :select_question)
   end
 
-  def answer_question(session, answer) do
-    GenServer.call(session, {:answer_question, answer})
+  def answer_question(name, answer) do
+    GenServer.call(via(name), {:answer_question, answer})
   end
 
   # Lifecycle
@@ -53,6 +56,32 @@ defmodule Mastery.Boundary.QuizSession do
       # Supervisor should do nothing when process crashes,
       # user should restart the process.
       restart: :temporary
+    }
+  end
+
+  def start_link({quiz, email}) do
+    GenServer.start_link(
+      __MODULE__,
+      {quiz, email},
+      name: via({quiz.title, email})
+    )
+  end
+
+  # We should always start process via Supervisor, not directly.
+  def take_quiz(quiz, email) do
+    DynamicSupervisor.start_child(
+      Mastery.Supervisor.QuizSession,
+      {__MODULE__, {quiz, email}}
+    )
+  end
+
+  # Finds session via name.
+  def via({_title, _email} = name) do
+    # via tuple is a tuple that OTP uses to register a process.
+    {
+      :via,
+      Registry,
+      {Mastery.Registry.QuizSession, name}
     }
   end
 end
