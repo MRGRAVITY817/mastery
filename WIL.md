@@ -96,3 +96,19 @@ These are the requirements for using dynamic supervisor.
 Registry.lookup(Mastery.Registry.QuizSession, user1)
 # => [{#PID<0.192.0>, nil}]
 ```
+
+## Workers
+
+### Use `Task` to create concurrent pipeline
+
+```elixir
+def multi_task(slow_jobs) do
+  slow_jobs
+  |> Task.async_stream(fn(f) -> f.() end)
+  |> Enum.map(fn {:ok, x} -> x end)
+end
+
+[users, projects] =
+  [&fetch_users(user_filter), &fetch_projects(project_filter)]
+  |> mulit_task
+```
