@@ -19,14 +19,16 @@ defmodule Mastery.Application do
         [name: Mastery.Registry.QuizSession, keys: :unique]
       },
       {
+        Mastery.Boundary.Proctor,
+        [name: Mastery.Boundary.Proctor]
+      },
+      {
         DynamicSupervisor,
         [
-          name: Mastery.Supervisor.QuizSession,
           # When this process fails, supervisor will only 
           # restart this process, not others.
+          name: Mastery.Supervisor.QuizSession,
           strategy: :one_for_one
-          # Sometimes for dependency problem, you might need
-          # to restart others, using :rest_for_one.
         ]
       }
     ]
