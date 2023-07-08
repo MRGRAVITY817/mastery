@@ -112,3 +112,7 @@ end
   [&fetch_users(user_filter), &fetch_projects(project_filter)]
   |> mulit_task
 ```
+
+## Adding additional component
+
+A sub-project inside a main project is called _poncho_ project.
