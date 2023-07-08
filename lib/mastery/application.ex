@@ -10,8 +10,25 @@ defmodule Mastery.Application do
     # Telling OTP that these applications should have a generic supervisor.
     # It will start them as singleton process.
     children = [
-      # We're adding QuizManager into process Registry
-      {Mastery.Boundary.QuizManager, [name: Mastery.Boundary.QuizManager]}
+      {
+        Mastery.Boundary.QuizManager,
+        [name: Mastery.Boundary.QuizManager]
+      },
+      {
+        Registry,
+        [name: Mastery.Registry.QuizSession, keys: :unique]
+      },
+      {
+        DynamicSupervisor,
+        [
+          name: Mastery.Supervisor.QuizSession,
+          # When this process fails, supervisor will only 
+          # restart this process, not others.
+          strategy: :one_for_one
+          # Sometimes for dependency problem, you might need
+          # to restart others, using :rest_for_one.
+        ]
+      }
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
