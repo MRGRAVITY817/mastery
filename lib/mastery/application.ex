@@ -7,9 +7,11 @@ defmodule Mastery.Application do
   def start(_type, _args) do
     IO.puts("Starting Mastery")
 
+    # Telling OTP that these applications should have a generic supervisor.
+    # It will start them as singleton process.
     children = [
-      # Starts a worker by calling: Mastery.Worker.start_link(arg)
-      # {Mastery.Worker, arg}
+      # We're adding QuizManager into process Registry
+      {Mastery.Boundary.QuizManager, [name: Mastery.Boundary.QuizManager]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
