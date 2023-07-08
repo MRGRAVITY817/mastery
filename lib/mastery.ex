@@ -2,11 +2,14 @@ defmodule Mastery do
   @moduledoc """
   Documentation for `Mastery`.
   """
-  alias Mastery.Boundary.QuizSession
+  alias Mastery.Boundary.{
+    QuizSession,
+    QuizManager,
+    TemplateValidator,
+    QuizValidator
+  }
+
   alias Mastery.Core.Quiz
-  alias Mastery.Boundary.TemplateValidator
-  alias Mastery.Boundary.QuizValidator
-  alias Mastery.Boundary.QuizManager
 
   @doc """
   Start quiz manager supervised by GenServer.

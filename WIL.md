@@ -37,3 +37,17 @@ So for the most of the time, use `handle_call`!
 ## How do we check if the server is stopped?
 
 Try `Process.alive? session`.
+
+## Three main pieces of lifecycle
+
+- GenServer
+- Supervisor
+- Configuration
+
+### Steps to implement good lifecycle in Elixir project
+
+- Define which types of processes we need.
+- Define how many of each process we need.
+- Tell supervisor to start/stop our working processes in an organized/repeated way.
+- Name & register processes, so that supervisors can find/use/revive them.
+- Establish a hierarchy of parent-child supervisors.
