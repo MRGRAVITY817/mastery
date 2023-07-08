@@ -41,4 +41,18 @@ defmodule Mastery.Boundary.QuizSession do
   def answer_question(session, answer) do
     GenServer.call(session, {:answer_question, answer})
   end
+
+  # Lifecycle
+
+  def child_spec({quiz, email}) do
+    %{
+      # An unique identifier, to differ from other siblings.
+      id: {__MODULE__, {quiz.title, email}},
+      # OTP will invoke `QuizSession.start_link({quiz, email})` 
+      start: {__MODULE__, :start_link, [{quiz, email}]},
+      # Supervisor should do nothing when process crashes,
+      # user should restart the process.
+      restart: :temporary
+    }
+  end
 end
