@@ -77,3 +77,15 @@ iex(3)> Mastery.Boundary.QuizManager.child_spec([name: Mastery.Boundary.QuizMana
    [[name: Mastery.Boundary.QuizManager]]}
 }
 ```
+
+### Dynamic supervisor.
+
+To create process for incoming users, use **dynamic supervisor**.  
+We don't know how much users will visit, so we have to create processes _dynamically_.
+
+These are the requirements for using dynamic supervisor.
+
+- You must provide a child spec, the description for how to start and restart processes.
+- The GenServer you're starting must have a `start_link`.
+- You need a strategy for naming and accessing the process.
+- You must register your dynamic supervisor, perhaps in `application.ex`.
