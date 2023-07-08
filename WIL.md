@@ -51,3 +51,29 @@ Try `Process.alive? session`.
 - Tell supervisor to start/stop our working processes in an organized/repeated way.
 - Name & register processes, so that supervisors can find/use/revive them.
 - Establish a hierarchy of parent-child supervisors.
+
+### How to explicitly use supervisor?
+
+```
+# Start QuizManager supervisor
+iex(1)> {:ok, sup_pid} = Supervisor.start_link(
+  [%{id: Mastery.Boundary.QuizManager,
+     start: { Mastery.Boundary.QuizManager, :start_link, [[ ]]}}],
+              [strategy: :one_for_one, name: TestSupervisor])
+
+{:ok, #PID<0.144.0>}
+
+# Stop supervisor
+iex(2)> Supervisor.stop(TestSupervisor)
+
+:ok
+
+# Examine the supervisor's policies
+iex(3)> Mastery.Boundary.QuizManager.child_spec([name: Mastery.Boundary.QuizManager])
+
+%{
+  id: Mastery.Boundary.QuizManager,
+  start: {Mastery.Boundary.QuizManager, :start_link,
+   [[name: Mastery.Boundary.QuizManager]]}
+}
+```
