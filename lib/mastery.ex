@@ -12,13 +12,6 @@ defmodule Mastery do
   alias Mastery.Core.Quiz
 
   @doc """
-  Start quiz manager supervised by GenServer.
-  """
-  def start_quiz_manager() do
-    GenServer.start_link(QuizManager, %{}, name: QuizManager)
-  end
-
-  @doc """
   Build a quiz via quiz manager.
   It first validates the quiz fields, and then builds it.
   """
