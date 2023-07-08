@@ -89,3 +89,10 @@ These are the requirements for using dynamic supervisor.
 - The GenServer you're starting must have a `start_link`.
 - You need a strategy for naming and accessing the process.
 - You must register your dynamic supervisor, perhaps in `application.ex`.
+
+### To find child process registered to registry
+
+```elixir
+Registry.lookup(Mastery.Registry.QuizSession, user1)
+# => [{#PID<0.192.0>, nil}]
+```

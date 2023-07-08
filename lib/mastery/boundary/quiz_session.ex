@@ -2,9 +2,39 @@ defmodule Mastery.Boundary.QuizSession do
   alias Mastery.Core.{Quiz, Response}
   use GenServer
 
+  # Lifecycle
   # Each user will have their own process
+  #
   def init({quiz, email}) do
     {:ok, {quiz, email}}
+  end
+
+  def child_spec({quiz, email}) do
+    %{
+      # An unique identifier, to differ from other siblings.
+      id: {__MODULE__, {quiz.title, email}},
+      # OTP will invoke `QuizSession.start_link({quiz, email})` 
+      start: {__MODULE__, :start_link, [{quiz, email}]},
+      # Supervisor should do nothing when process crashes,
+      # user should restart the process.
+      restart: :temporary
+    }
+  end
+
+  def start_link({quiz, email}) do
+    GenServer.start_link(
+      __MODULE__,
+      {quiz, email},
+      name: via({quiz.title, email})
+    )
+  end
+
+  # We should always start process via Supervisor, not directly.
+  def take_quiz(quiz, email) do
+    DynamicSupervisor.start_child(
+      Mastery.Supervisor.QuizSession,
+      {__MODULE__, {quiz, email}}
+    )
   end
 
   def handle_call(:select_question, _from, {quiz, email}) do
@@ -43,36 +73,6 @@ defmodule Mastery.Boundary.QuizSession do
 
   def answer_question(name, answer) do
     GenServer.call(via(name), {:answer_question, answer})
-  end
-
-  # Lifecycle
-
-  def child_spec({quiz, email}) do
-    %{
-      # An unique identifier, to differ from other siblings.
-      id: {__MODULE__, {quiz.title, email}},
-      # OTP will invoke `QuizSession.start_link({quiz, email})` 
-      start: {__MODULE__, :start_link, [{quiz, email}]},
-      # Supervisor should do nothing when process crashes,
-      # user should restart the process.
-      restart: :temporary
-    }
-  end
-
-  def start_link({quiz, email}) do
-    GenServer.start_link(
-      __MODULE__,
-      {quiz, email},
-      name: via({quiz.title, email})
-    )
-  end
-
-  # We should always start process via Supervisor, not directly.
-  def take_quiz(quiz, email) do
-    DynamicSupervisor.start_child(
-      Mastery.Supervisor.QuizSession,
-      {__MODULE__, {quiz, email}}
-    )
   end
 
   # Finds session via name.

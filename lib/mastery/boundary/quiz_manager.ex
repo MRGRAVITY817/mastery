@@ -2,11 +2,17 @@ defmodule Mastery.Boundary.QuizManager do
   alias Mastery.Core.Quiz
   use GenServer
 
+  # Lifecycle
+  #
   def init(quizzes) when is_map(quizzes) do
     {:ok, quizzes}
   end
 
   def init(_quizzes), do: {:error, "quizzes must be a map"}
+
+  def start_link(options \\ []) do
+    GenServer.start_link(__MODULE__, %{}, options)
+  end
 
   def handle_call({:build_quiz, quiz_fields}, _from, quizzes) do
     quiz = Quiz.new(quiz_fields)
@@ -40,10 +46,5 @@ defmodule Mastery.Boundary.QuizManager do
 
   def lookup_quiz_by_title(manager \\ __MODULE__, quiz_title) do
     GenServer.call(manager, {:lookup_quiz_by_title, quiz_title})
-  end
-
-  # Lifecycle
-  def start_link(options \\ []) do
-    GenServer.start_link(__MODULE__, %{}, options)
   end
 end
