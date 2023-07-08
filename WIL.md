@@ -28,3 +28,7 @@ $ MIX_ENV=test mix converalls
 - `init(initial_state)`: Establish a new state of GenServer. We (indirectly) invoke this every time we start server.
 - `handle_call(message, from, state) -> {:reply, message_to_client, new_state}`: Handle synchronous Two-way message (like a phone _call_).
 - `handle_cast(message, state) -> {:noreply, new_state}`: One-way asynchronous message handler (like pod*cast*).
+
+## How do we check if the server is stopped?
+
+Try `Process.alive? session`.
