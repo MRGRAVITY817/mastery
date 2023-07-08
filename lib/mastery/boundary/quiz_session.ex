@@ -104,7 +104,7 @@ defmodule Mastery.Boundary.QuizSession do
     |> Enum.flat_map(&active_sessions(&1, quiz_title))
   end
 
-  def end_session(names) do
+  def end_sessions(names) do
     Enum.each(names, fn name -> GenServer.stop(via(name)) end)
   end
 end
