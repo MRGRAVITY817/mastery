@@ -29,7 +29,7 @@ defmodule Mastery.Boundary.Proctor do
     QuizManager.remove_quiz(title)
 
     title
-    |> QuizSession.active_session_for()
+    |> QuizSession.active_sessions_for()
     |> QuizSession.end_sessions()
 
     Logger.info("Stopped quiz #{title}.")
