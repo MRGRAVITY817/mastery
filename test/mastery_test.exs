@@ -6,6 +6,23 @@ defmodule MasteryTest do
   alias MasteryPersistence.Repo
   alias MasteryPersistence.Response
 
+  setup do
+    enable_persistence()
+
+    always_add_1_to_2 = [
+      template_fields(generators: addition_generators([1], [2]))
+    ]
+
+    # Hide the Logger logs from test output,
+    # and ensure logging is actually being processed.
+    assert "" !=
+             ExUnit.CaptureLog.capture_log(fn ->
+               :ok = start_quiz(always_add_1_to_2)
+             end)
+
+    :ok
+  end
+
   test "greets the world" do
     assert Mastery.hello() == :world
   end
