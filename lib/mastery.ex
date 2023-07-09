@@ -12,6 +12,8 @@ defmodule Mastery do
 
   alias Mastery.Core.Quiz
 
+  @persistence_fn Application.get_env(:mastery, :persistence_fn)
+
   @doc """
   Build a quiz via quiz manager.
   It first validates the quiz fields, and then builds it.
@@ -43,8 +45,13 @@ defmodule Mastery do
     QuizSession.select_question(name)
   end
 
-  def answer_question(name, answer) do
-    QuizSession.answer_question(name, answer)
+  def answer_question(
+        name,
+        answer,
+        # provide default function for backward compatability.
+        persistence_fn \\ @persistence_fn
+      ) do
+    QuizSession.answer_question(name, answer, persistence_fn)
   end
 
   def schedule_quiz(quiz, templates, start_at, end_at) do
