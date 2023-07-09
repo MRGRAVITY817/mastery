@@ -22,8 +22,8 @@ defmodule MasteryPersistence.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:ecto_sql, "~> 3.1"},
-      {:postgrex, "~> 0.14.1"}
+      {:ecto_sql, "~> 3.10"},
+      {:postgrex, ">= 0.0.0"}
     ]
   end
 end

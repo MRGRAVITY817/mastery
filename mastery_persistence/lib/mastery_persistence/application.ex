@@ -3,10 +3,6 @@ defmodule MasteryPersistence.Application do
 
   use Application
 
-  use Ecto.Repo,
-    otp_app: :mastery_persistence,
-    adapter: Ecto.Adapters.Postgres
-
   @impl true
   def start(_type, _args) do
     children = [

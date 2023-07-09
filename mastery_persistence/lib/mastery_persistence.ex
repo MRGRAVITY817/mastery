@@ -26,4 +26,17 @@ defmodule MasteryPersistence do
 
     result
   end
+
+  def report(quiz_title) do
+    quiz_title = to_string(quiz_title)
+
+    from(
+      r in Response,
+      select: {r.email, count(r.id)},
+      where: r.quiz_title == ^quiz_title,
+      group_by: [r.quiz_title, r.email]
+    )
+    |> Repo.all()
+    |> Enum.into(Map.new())
+  end
 end
