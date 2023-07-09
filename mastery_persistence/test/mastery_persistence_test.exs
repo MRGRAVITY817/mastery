@@ -16,7 +16,16 @@ defmodule MasteryPersistenceTest do
         timestamp: DateTime.utc_now()
       }
 
+      # test context
       {:ok, %{response: response}}
+    end
+
+    test "responses are recorded", %{response: response} do
+      assert Repo.aggregate(Response, :count, :id) == 0
+      assert :ok == MasteryPersistence.record_response(response)
+
+      assert Repo.all(Response)
+             |> Enum.map(fn r -> r.email end) == [response.email]
     end
   end
 end
