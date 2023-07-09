@@ -6,25 +6,36 @@ defmodule MasteryTest do
   alias MasteryPersistence.Repo
   alias MasteryPersistence.Response
 
-  setup do
-    enable_persistence()
+  describe "Mastery publice API" do
+    setup do
+      enable_persistence()
 
-    always_add_1_to_2 = [
-      template_fields(generators: addition_generators([1], [2]))
-    ]
+      always_add_1_to_2 = [
+        template_fields(generators: addition_generators([1], [2]))
+      ]
 
-    # Hide the Logger logs from test output,
-    # and ensure logging is actually being processed.
-    assert "" !=
-             ExUnit.CaptureLog.capture_log(fn ->
-               :ok = start_quiz(always_add_1_to_2)
-             end)
+      # Hide the Logger logs from test output,
+      # and ensure logging is actually being processed.
+      assert "" !=
+               ExUnit.CaptureLog.capture_log(fn ->
+                 :ok = start_quiz(always_add_1_to_2)
+               end)
 
-    :ok
-  end
+      :ok
+    end
 
-  test "greets the world" do
-    assert Mastery.hello() == :world
+    test "Take a quiz, manage lifecycle and persist responses" do
+      session = take_quiz("hoon@email.com")
+
+      select_question(session)
+
+      assert give_wrong_answer(session) == {"1 + 2", false}
+      assert give_right_answer(session) == {"1 + 2", true}
+      assert response_count() > 0
+
+      assert give_right_answer(session) == :finished
+      assert QuizSession.active_sessions_for(Math.quiz_fields().title) == []
+    end
   end
 
   # Test helper methods
@@ -32,6 +43,7 @@ defmodule MasteryTest do
   # Get test-specific repo that manages transactions.
   defp enable_persistence() do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    Ecto.Adapters.SQL.Sandbox.mode(Repo, {:shared, self()})
   end
 
   defp response_count() do
@@ -57,7 +69,7 @@ defmodule MasteryTest do
     Mastery.answer_question(
       session,
       "wrong",
-      &MasteryPersistence.record_reposnse/2
+      &MasteryPersistence.record_response/2
     )
   end
 
@@ -65,7 +77,7 @@ defmodule MasteryTest do
     Mastery.answer_question(
       session,
       "3",
-      &MasteryPersistence.record_reposnse/2
+      &MasteryPersistence.record_response/2
     )
   end
 end

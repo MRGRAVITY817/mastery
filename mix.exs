@@ -23,7 +23,7 @@ defmodule Mastery.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:mastery_persistence, path: "../mastery_persistence"},
+      {:mastery_persistence, path: "./mastery_persistence"},
       {:excoveralls, "~> 0.10", only: :test},
       {:observer_cli, "~> 1.7"}
     ]

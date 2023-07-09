@@ -1,7 +1,6 @@
 defmodule Mastery.Boundary.Proctor do
   use GenServer
   require Logger
-  alias Mastery.Core.Quiz
   alias Mastery.Boundary.{QuizManager, QuizSession}
 
   def start_link(options \\ []) do

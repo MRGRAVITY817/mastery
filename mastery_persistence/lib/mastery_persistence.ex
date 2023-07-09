@@ -13,7 +13,7 @@ defmodule MasteryPersistence do
           template_name: to_string(response.template_name),
           to: response.to,
           email: response.email,
-          answer: response.correct,
+          answer: response.answer,
           correct: response.correct,
           inserted_at: response.timestamp,
           updated_at: response.timestamp

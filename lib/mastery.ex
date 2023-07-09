@@ -12,7 +12,7 @@ defmodule Mastery do
 
   alias Mastery.Core.Quiz
 
-  @persistence_fn Application.get_env(:mastery, :persistence_fn)
+  @persistence_fn Application.compile_env(:mastery, :persistence_fn)
 
   @doc """
   Build a quiz via quiz manager.
